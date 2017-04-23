@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<style> 
+    body {
+        font-family: Tahoma, sans-serif;
+        font-size: 10pt;
+    }
+    #main {
+        width: 301px;
+    }
+    span {
+        width: 58px;
+        display: inline-block;       
+        border-left: 1px solid #888;
+        text-align: right;
+    }
+    table {
+        border-collapse: collapse;
+    }
+    th {
+        background-color: #B1E6FD;
+        border: 1px solid black;
+        padding-left: 8px;
+        padding-right: 8px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+    td {
+        border: 1px solid black;
+        padding: 4px;
+        width: 50px;
+    }
+    .host {
+        width: 170px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+    .odd {
+        background-color: #ECECEC;
+    }
+    .even {
+        background-color: #fff;
+    }
+    
+</style>
+<script src="popup.js"></script>
+
+<h4>Host page load timings</h4>
+<div id="main">
+    <table style="width:100%;">
+        <thead>
+            <tr>
+                <th>host</th>
+                <th>time(ms)</th>
+                <th>visits</th>
+            </tr>
+        </thead>
+        <tbody id="timing_table">
+        </tbody>
+    </table>
+    <div>
+        <span style="border: none;">&nbsp;</span>
+    </div>
+    <div>
+        <input style="padding-top: 7px; padding-bottom: 7px; padding-left: 20px; padding-right: 20px;" type='button' id='btnreset' value='Reset'>
+    </div>
+</div>
