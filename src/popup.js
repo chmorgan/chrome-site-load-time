@@ -21,6 +21,9 @@ through which recipients can access the Corresponding Source.
 document.addEventListener('DOMContentLoaded', function () {
     var btnreset = document.getElementById("btnreset");
     btnreset.addEventListener('click', resetStats);
+
+    var btnexportcsv = document.getElementById("btnexportcsv");
+    btnexportcsv.addEventListener('click', exportCSV);
 });
 
 function resetStats() {
@@ -29,23 +32,75 @@ function resetStats() {
     removeEntries();
 }
 
+function exportCSV() {
+    chrome.storage.local.get('cache', function(data) {
+        var entries = sortEntries(data.cache);
+
+        var outputCSV = 'host,url,duration_ms\n';
+
+        for(var entry in entries)
+        {
+            var host_entry = entries[entry];
+            var timing_array = host_entry[1];
+
+            for(var i = 0; i < timing_array.length; i++)
+            {
+                var timing_entry = timing_array[i];
+                var duration = getElapsedTime(timing_entry);
+
+                outputCSV = outputCSV + '\"' + host_entry[0] + '\",' + timing_entry.url + ',' + duration + '\n';
+            }
+        }
+
+        var link = document.createElement('a');
+        link.setAttribute('href', 'data:text/plain;base64,' + window.btoa(outputCSV));
+        link.setAttribute('download', 'timing_export.csv');
+        link.click();
+    });
+}
+
 chrome.tabs.getSelected(null, function (tab) {
     addEntries();
 });
+
+function getElapsedTime(timing_entry)
+{
+    var t = timing_entry.timing;
+    var start = t.redirectStart == 0 ? t.fetchStart : t.redirectStart;
+    var total = t.loadEventEnd - start;
+
+    return total;
+}
 
 function getTimingSum(timing_entries) {
     var total_sum = 0;
     for(var i = 0; i < timing_entries.length; i++)
     {
         var timing_entry = timing_entries[i];
-        var t = timing_entry.timing;
-        var start = t.redirectStart == 0 ? t.fetchStart : t.redirectStart;
-        var total = t.loadEventEnd - start;
-
+        var total = getElapsedTime(timing_entry);
         total_sum += total;
     }
 
     return total_sum;
+}
+
+function sortEntries(entriesObject)
+{
+    // convert entries into an array and sort them
+    var sortable = [];
+    for (var entry in entriesObject) {
+        sortable.push([entry, entriesObject[entry]]);
+    }
+
+    sortable.sort(function(a, b) {
+        var a_sum = getTimingSum(a[1]);
+        var b_sum = getTimingSum(b[1]);
+        return (a_sum > b_sum) ? 1 : ((b_sum > a_sum) ? -1 : 0);
+    });
+
+    sortable.reverse();
+
+    return sortable;
 }
 
 function addEntries() {
@@ -53,19 +108,7 @@ function addEntries() {
         // build the html from the site data
         var timing_table = document.getElementById('timing_table');
 
-        // convert entries into an array and sort them
-        var sortable = [];
-        for (var entry in data.cache) {
-            sortable.push([entry, data.cache[entry]]);
-        }
-
-        sortable.sort(function(a, b) {
-            var a_sum = getTimingSum(a[1]);
-            var b_sum = getTimingSum(b[1]);
-            return (a_sum > b_sum) ? 1 : ((b_sum > a_sum) ? -1 : 0);
-        });
-
-        sortable.reverse();
+        var sortable = sortEntries(data.cache);
 
         for(var i = 0; i < sortable.length; i++)
         {
