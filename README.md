@@ -11,5 +11,8 @@ Icon from Sumana Chamrunworakiat, TH, https://thenounproject.com/search/?q=sigma
 
 Based on https://github.com/alex-vv/chrome-load-timer (https://chrome.google.com/webstore/detail/page-load-time/fploionmjgeclbkemipmkogoaohcdbig?hl=en)
 
+Close icon from:
+<div>Icons made by <a href="http://www.flaticon.com/authors/pixel-buddha" title="Pixel Buddha">Pixel Buddha</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+
 # License
 This project is licensed under the terms of the GPLv3
