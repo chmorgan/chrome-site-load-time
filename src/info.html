@@ -40,13 +40,28 @@
     .even {
         background-color: #fff;
     }
-    
+    div#filter_div {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    img#cancel_img:hover {
+        filter: brightness(125%);
+    }
+    img#cancel_img.disabled {
+        filter: grayscale(75%);
+    }
+
 </style>
+<script src="thirdParty/jquery-3.2.1.min.js"></script>
 <script src="popup.js"></script>
 
-<h4>Host page load timings</h4>
+<h4 style="margin-top:0px; margin-bottom:0px;">Host page load timings</h4>
+<div id="filter_div">
+    <input type="text" placeholder="Host filter here" id="filter_text">
+    <img class="disabled" id="cancel_img" style="vertical-align: middle;" src="close.png" height="20" width="20">
+</div>
 <div id="main">
-    <table style="width:100%;">
+    <table id="main_table" style="width:100%;">
         <thead>
             <tr>
                 <th>host</th>
