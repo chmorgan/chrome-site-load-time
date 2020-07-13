@@ -39,7 +39,7 @@ function resetStats() {
 function exportCSV() {
     getFilteredEntries().then(function(filteredEntries)
     {
-        var outputCSV = 'host,url,duration_ms\n';
+        var outputCSV = 'unixtime,host,url,duration_ms\n';
 
         for(var entry in filteredEntries)
         {
@@ -51,7 +51,7 @@ function exportCSV() {
                 var timing_entry = timing_array[i];
                 var duration = getElapsedTime(timing_entry);
 
-                outputCSV = outputCSV + '\"' + host_entry[0] + '\",' + timing_entry.url + ',' + duration + '\n';
+                outputCSV = outputCSV + '\"' + timing_entry.timing.loadEventEnd + '\",' + host_entry[0] + '\",' + timing_entry.url + ',' + duration + '\n';
             }
         }
 
