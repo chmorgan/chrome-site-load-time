@@ -51,7 +51,7 @@ function exportCSV() {
                 var timing_entry = timing_array[i];
                 var duration = getElapsedTime(timing_entry);
 
-                outputCSV = outputCSV + '\"' + timing_entry.timing.loadEventEnd + '\",' + host_entry[0] + '\",' + timing_entry.url + ',' + duration + '\n';
+                outputCSV = outputCSV + timing_entry.timing.loadEventEnd + ',' + '\"' + host_entry[0] + '\"' + ',' + '\"' + timing_entry.url + '\"' + ',' + duration + '\n';
             }
         }
 
