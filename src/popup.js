@@ -39,7 +39,7 @@ function resetStats() {
 function exportCSV() {
     getFilteredEntries().then(function(filteredEntries)
     {
-        var outputCSV = 'unixtime,host,url,duration_ms\n';
+        var outputCSV = 'unixtime,host,url,network_time,server_time,client_time,duration_ms\n';
 
         for(var entry in filteredEntries)
         {
@@ -49,9 +49,14 @@ function exportCSV() {
             for(var i = 0; i < timing_array.length; i++)
             {
                 var timing_entry = timing_array[i];
-                var duration = getElapsedTime(timing_entry);
+                var elapsed_entry = getElapsedTime(timing_entry);
 
-                outputCSV = outputCSV + timing_entry.timing.loadEventEnd + ',' + '\"' + host_entry[0] + '\"' + ',' + '\"' + timing_entry.url + '\"' + ',' + duration + '\n';
+                outputCSV = outputCSV + timing_entry.timing.loadEventEnd + ',' +
+                                 '\"' + host_entry[0] + '\"' + ',' + '\"' + timing_entry.url + '\"' + ',' +
+                                elapsed_entry.network_time + ',' +
+                                elapsed_entry.server_time + ',' +
+                                elapsed_entry.client_time + ',' +
+                                elapsed_entry.total + '\n';
             }
         }
 
@@ -74,21 +79,40 @@ function getElapsedTime(timing_entry)
 {
     var t = timing_entry.timing;
     var start = t.redirectStart == 0 ? t.fetchStart : t.redirectStart;
+
+    var network_time = t.connectEnd - t.navigationStart;
+    var server_time = t.responseEnd - t.connectEnd;
+    var client_time = t.loadEventEnd - t.responseEnd;
     var total = t.loadEventEnd - start;
 
-    return total;
+    return {
+        network_time: network_time,
+        server_time: server_time,
+        client_time: client_time,
+        total: total
+    }
 }
 
 function getTimingSum(timing_entries) {
-    var total_sum = 0;
+    var sum = {
+        network_time: 0,
+        server_time: 0,
+        client_time: 0,
+        total: 0
+    }
+
     for(var i = 0; i < timing_entries.length; i++)
     {
         var timing_entry = timing_entries[i];
-        var total = getElapsedTime(timing_entry);
-        total_sum += total;
+        var elapsed_entry = getElapsedTime(timing_entry);
+
+        sum.network_time += elapsed_entry.network_time;
+        sum.server_time += elapsed_entry.server_time;
+        sum.client_time += elapsed_entry.client_time;
+        sum.total += elapsed_entry.total;
     }
 
-    return total_sum;
+    return sum;
 }
 
 function sortEntries(entriesObject)
@@ -102,7 +126,7 @@ function sortEntries(entriesObject)
     sortable.sort(function(a, b) {
         var a_sum = getTimingSum(a[1]);
         var b_sum = getTimingSum(b[1]);
-        return (a_sum > b_sum) ? 1 : ((b_sum > a_sum) ? -1 : 0);
+        return (a_sum.total > b_sum.total) ? 1 : ((b_sum.total > a_sum.total) ? -1 : 0);
     });
 
     sortable.reverse();
@@ -152,9 +176,12 @@ function addEntries(filteredEntries) {
         }
 
         // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
+        var cell1Host = row.insertCell(0);
+        var cell2NetworkTime = row.insertCell(1);
+        var cell3ServerTime = row.insertCell(2);
+        var cell4ClientTime = row.insertCell(3);
+        var cell5TotalTime = row.insertCell(4);
+        var cell6Visits = row.insertCell(5);
 
         var host = entry[0];
         var host_entry = entry[1];
@@ -162,9 +189,12 @@ function addEntries(filteredEntries) {
         timing_sum = getTimingSum(host_entry);
 
         // Add some text to the new cells:
-        cell1.innerHTML = "<div class='host' title='" + host + "'>" + host + "</div>";
-        cell2.innerHTML = timing_sum;
-        cell3.innerHTML = host_entry.length;
+        cell1Host.innerHTML = "<div class='host' title='" + host + "'>" + host + "</div>";
+        cell2NetworkTime.innerHTML = timing_sum.network_time;
+        cell3ServerTime.innerHTML = timing_sum.server_time;
+        cell4ClientTime.innerHTML = timing_sum.client_time;
+        cell5TotalTime.innerHTML = timing_sum.total;
+        cell6Visits.innerHTML = host_entry.length;
     }
 }
 
