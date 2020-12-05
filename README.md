@@ -5,10 +5,10 @@ which can help to drive page load optimizations.
 
 Copyright 2020 Chris Morgan <chmorgan@gmail.com>
 
-Total time is split into a few different parts.
+Total time is split into a few different parts, network time, server time, client time and total time.
 
-Copied from <a href="https://chrome.google.com/webstore/detail/simple-performance-bar/gkicgocakpcjjdeigifekmfmpcpepakk">'simple-performance-bar'</a>
 "Network time is connectEnd minus navigationStart. Server time is responseEnd minus connectEnd. Finally, client time is loadEventEnd minus responseEnd."
+(as described by <a href="https://chrome.google.com/webstore/detail/simple-performance-bar/gkicgocakpcjjdeigifekmfmpcpepakk">'simple-performance-bar'</a>)
 
 Icon from Sumana Chamrunworakiat, TH, https://thenounproject.com/search/?q=sigma&i=659837
 
