@@ -3,7 +3,7 @@ Extension that measures and accumulates page load time for hosts using the Web T
 Can be used to determine how much time is spent waiting for pages on sites to be loaded
 which can help to drive page load optimizations.
 
-Copyright 2017 Chris Morgan <chmorgan@gmail.com>
+Copyright 2020 Chris Morgan <chmorgan@gmail.com>
 
 Total time is split into a few different parts.
 

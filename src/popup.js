@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2017  Chris Morgan <chmorgan@gmail.com>
+Copyright (C) 2020  Chris Morgan <chmorgan@gmail.com>
 
 The JavaScript code in this page is free software: you can
 redistribute it and/or modify it under the terms of the GNU
